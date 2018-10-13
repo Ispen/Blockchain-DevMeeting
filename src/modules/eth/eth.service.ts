@@ -21,19 +21,21 @@ export class EthService {
         return ret;
     }
     async sprint2_2(): Promise<string> {
-        let ret: string;
+        let ret: string = '';
         const block = await this.web3.eth.getBlock('latest');
         const { transactions } = block;
-        transactions.forEach(async element => {
+        await Promise.all(transactions.map(async element => {
             const transaction = await this.web3.eth.getTransaction(element)
             //nadawcę, adresata, wartość, gas, gasPrice (wyjaśnienie później) i dane
             ret += `
             Transaction owner: ${transaction.from}<br>
             Recipient: ${transaction.to}<br>
             Value: ${transaction.value}<br>
-            Number of transactions: ${transactions.length}<br>
+            Gas: ${transaction.gas}<br>
+            GasPrice: ${transaction.gasPrice}<br>
+            Data: ${transaction.v}<br>
             `;
-        });
+        }));
         return ret;
     } 
 }
